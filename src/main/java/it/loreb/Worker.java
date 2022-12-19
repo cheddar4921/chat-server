@@ -146,6 +146,7 @@ public class Worker implements Runnable
             catch (IOException ioe) 
             {
                 logger.severe("ERROR. Something is wrong in the client's stream. Exception: " + ioe.getMessage());
+                running = false;
             }
         }
         logger.info("Worker " + this.id + " shutting down.");
