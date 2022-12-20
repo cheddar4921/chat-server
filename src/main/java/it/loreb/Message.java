@@ -17,7 +17,6 @@ public class Message
         YES,
         NO,
         NAME,
-        LOG,
         LIST,
         DISCONNECT
     }
@@ -27,11 +26,21 @@ public class Message
     private String          to;
     private String          from;
 
+    /**
+     * Empty constructor.
+     */
     public Message()
     {
 
     }
 
+    /**
+     * Message is the main method of information exchange in the application. They have methods to be formatted from and to JSON.
+     * @param tag The type of message. Tagging is done to reduce stress on the server's end.
+     * @param to Who the message is for.
+     * @param from Who sent the message.
+     * @param contents The contents of the message. These don't have to be necessarly something the user sees.
+     */
     public Message(@JsonProperty("tag")Tag tag, @JsonProperty("to")String to, @JsonProperty("from")String from, @JsonProperty("contents")String contents)
     {
         this.contents = contents;
@@ -66,6 +75,13 @@ public class Message
         return e.contents.isEmpty();
     }
 
+    /**
+     * Method to format a message from a string or command line.
+     * @param str The string to be formatted.
+     * @param from The name of the client sending this.
+     * @return The formatted message.
+     * @throws InvalidMessageException Thrown when the message can't be formatted into a valid message type.
+     */
     public static Message formatMessage(String str, String from) throws InvalidMessageException
     {
         Message m = new Message();
@@ -95,17 +111,6 @@ public class Message
                     m.setTo(str_array.get(0));
                     str_array.remove(0);
                     m.setContents(String.join(" ", str_array));
-                }
-                else
-                {
-                    throw new InvalidMessageException("Amount of arguments invalid.");
-                }
-                break;
-                case "/log":
-                m.setTag(Tag.LOG);
-                if (str_array.size() == 2)
-                {
-                    m.setContents(str_array.get(1));
                 }
                 else
                 {

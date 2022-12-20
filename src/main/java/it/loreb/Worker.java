@@ -31,11 +31,14 @@ public class Worker implements Runnable
     private static SimpleFormatter  sf;
     private static File             logFile;
 
+
     /**
-     * @param parent The parent of the worker, for reference.
-     * @param cSocket The socket to which the client is connected to.
-     * @param id The ID of this worker.
-     * @throws IOException Exception caused by errors in the streams.
+     * The worker is one of the subordinates of the server. 
+     * Each of them is connected to a client and they handle input and output management.
+     * @param parent The server referece.
+     * @param cSocket The client socket.
+     * @param id The ID of the new worker.
+     * @throws IOException Thrown when an error occurs in the creation of a log file.
      */
     public Worker(Server parent, Socket cSocket, int id) throws IOException
     {
@@ -72,7 +75,6 @@ public class Worker implements Runnable
         }
         catch (IOException e)
         {
-            //TODO handle this error better
             logger.severe("ERROR. The client's stream doesn't seem to be working. Closing the worker. Exception: " + e.getMessage());
             running = false;
         }
@@ -119,11 +121,11 @@ public class Worker implements Runnable
                             if (parent.isNameFree(m.getContents()))
                             {
                                 clientName = m.getContents();
-                                sendToClient(new Message(Tag.YES,"-", "SERVER", "NAME"));
+                                sendToClient(new Message(Tag.YES,"-", "SERVER", "Name change approved."));
                             }
                             else
                             {
-                                sendToClient(new Message(Tag.NO,"-", "SERVER", "NAME"));
+                                sendToClient(new Message(Tag.NO,"-", "SERVER", "Name unavailable."));
                             }
                             break;
                         case MSG:
@@ -138,7 +140,7 @@ public class Worker implements Runnable
                             running = false;
                             break;
                         default:
-                            sendToClient(new Message(Tag.NO,"-", "SERVER", "NOT FOUND"));
+                            sendToClient(new Message(Tag.NO,"-", "SERVER", "Command not found."));
                             break;
                     }
                 }
@@ -153,6 +155,12 @@ public class Worker implements Runnable
         parent.removeWorker(this.id);
     }
 
+    /**
+     * Function to send to the specific client assigned to the worker a message.
+     * @param m The message to be send.
+     * @throws JsonProcessingException Thrown when the message cannot be formatted to JSON.
+     * @throws IOException Thrown when an error in the client's stream occurs.
+     */
     public void sendToClient(Message m) throws JsonProcessingException, IOException
     {
         String str = Message.toJSON(m);

@@ -29,9 +29,11 @@ public class Server implements Runnable
     private ArrayList<Worker>       workers; //array to reference workers
     private ArrayList<Thread>       threads; //array to reference the threads workers are on
 
+
     /**
-     * @param port Server's port.
-     * @throws IOException Logger and Socket can throw IOException.
+     * The server is responsable for managing workers, adding new workers and thus establishing connections.
+     * @param port The port the server accepts clients on.
+     * @throws IOException Thrown when an error occurs in the creation of a log file.
      */
     public Server(int port) throws IOException
     {
