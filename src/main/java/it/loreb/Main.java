@@ -7,6 +7,11 @@ public class Main
 {
     public static void main( String[] args ) throws IOException
     {
+        int port = 25575;
+        if (args.length > 0)
+        {
+            port = Integer.parseInt(args[0]);
+        }
         try
         {
             File dir = new File("logs");
@@ -14,7 +19,7 @@ public class Main
             {
                 dir.mkdir();
             }
-            Server mainServer = new Server(25575);
+            Server mainServer = new Server(port);
             mainServer.run();
             System.out.println("Done");
         }

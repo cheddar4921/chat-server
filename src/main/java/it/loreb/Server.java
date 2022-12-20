@@ -48,7 +48,7 @@ public class Server implements Runnable
         logger.addHandler(fh);
         logger.info("Hello world!");
 
-        this.port = port;
+        this.port = validatePort(port);
         sSocket = new ServerSocket(this.port);
 
         threads = new ArrayList<Thread>();
@@ -154,5 +154,23 @@ public class Server implements Runnable
             }
         }
     }  
+
+    /**
+     * Validates the port number inserted when executing the program.
+     * @param port The port number to validate.
+     * @return Returns the port number if valid. If not valid, returns 25575 to use as default port
+     */
+    public int validatePort(int port)
+    {
+        if ((port > 0) && (port < 65536))
+        {
+            return port;
+        }
+        else
+        {
+            logger.warning("PORT NUMBER INVALID. Using 25575 instead.");
+            return 25575;
+        }
+    }
     
 }
