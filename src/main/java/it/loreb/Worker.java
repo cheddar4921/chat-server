@@ -150,6 +150,10 @@ public class Worker implements Runnable
                 logger.severe("ERROR. Something is wrong in the client's stream. Exception: " + ioe.getMessage());
                 running = false;
             }
+            catch (Exception e)
+            {
+                logger.severe("ERROR. Unknown exception: " + e.getMessage());
+            }
         }
         logger.info("Worker " + this.id + " shutting down.");
         parent.removeWorker(this.id);

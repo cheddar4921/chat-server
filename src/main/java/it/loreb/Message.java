@@ -9,8 +9,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Message class used for the exchange of messages between server and host.
+ */
 public class Message 
 {
+    /**
+     * Tag type of a message. Can be MSG, YES, NO, NAME, LIST or DISCONNECT.
+     */
     enum Tag
     {
         MSG,
@@ -21,9 +27,21 @@ public class Message
         DISCONNECT
     }
 
+    /**
+     *Contents of the message.
+     */
     private String          contents;
+    /**
+     *Tag of the message. Indicates what command has been used. If no command has been used, it defaults to MSG.
+     */
     private Tag             tag;
+    /**
+     *Reciever of the message.
+     */
     private String          to;
+    /**
+     *Sender of the message.
+     */
     private String          from;
 
     /**
@@ -35,7 +53,7 @@ public class Message
     }
 
     /**
-     * Message is the main method of information exchange in the application. They have methods to be formatted from and to JSON.
+     * Default constructor.
      * @param tag The type of message. Tagging is done to reduce stress on the server's end.
      * @param to Who the message is for.
      * @param from Who sent the message.
@@ -55,24 +73,28 @@ public class Message
         return "tag: " + this.tag + ", from: " + this.from + ", to: " + this.to + ", contents:'" + this.contents + "'";
     }
 
+    /**
+     * Method used to get a message from a JSON string.
+     * @param str The JSON contents.
+     * @return The message.
+     * @throws JsonMappingException Thrown when can't properly map to class.
+     * @throws JsonProcessingException Thrown when can't process JSON.
+     * @throws IOException Thrown when there's a IO error.
+     */
     public static Message fromJSON(String str) throws JsonMappingException, JsonProcessingException, IOException
     {
         return new ObjectMapper().readValue(str, Message.class);
     }
 
+    /**
+     * Method used to turn the message into a JSON string to be sent through the stream socket.
+     * @param m The message.
+     * @return The string to be sent.
+     * @throws JsonProcessingException Thrown when can't process JSON.
+     */
     public static String toJSON(Message m) throws JsonProcessingException
     {
         return new ObjectMapper().writeValueAsString(m);
-    }
-
-    public static Message empty()
-    {
-        return new Message();
-    }
-
-    public static boolean isEmpty(Message e)
-    {
-        return e.contents.isEmpty();
     }
 
     /**
@@ -146,34 +168,66 @@ public class Message
         return m;
     }
 
+    /**
+     * Returns the message's tag.
+     * @return The message's tag.
+     */
     public Tag getTag() {
         return tag;
     }
 
+    /**
+     * Sets the tag.
+     * @param tag The tag to be set to.
+     */
     public void setTag(Tag tag) {
         this.tag = tag;
     }
     
+    /**
+     * Returns the message's contents.
+     * @return The message's contents.
+     */
     public String getContents() {
         return contents;
     }
-
+    
+    /**
+     * Sets the contents.
+     * @param tag The contents to be set to.
+    */
     public void setContents(String contents) {
         this.contents = contents;
     }
 
+    /**
+     * Returns the reciever.
+     * @return The reciever's clientName.
+     */
     public String getTo() {
         return to;
     }
 
+    /**
+     * Sets the reciever.
+     * @param to The reciever's clientName.
+     */
     public void setTo(String to) {
         this.to = to;
     }
 
+    /**
+     * Returns the sender.
+     * @return The sender's clientName.
+     */
     public String getFrom() {
         return from;
     }
 
+    /**
+     * Sets the sender.
+     * @param from The sender's clientName.
+     */
     public void setFrom(String from) {
         this.from = from;
     }

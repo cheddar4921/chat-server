@@ -80,6 +80,10 @@ public class Server implements Runnable
             {
                 logger.severe("Something went wrong in the stream of the socket. " + e.getMessage());
             }
+            catch (Exception e)
+            {
+                logger.severe("ERROR. Unknown exception: " + e.getMessage());
+            }
         }
     }
 
