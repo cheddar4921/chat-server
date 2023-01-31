@@ -2,6 +2,9 @@ logs
 src/test
 target
 .vscode
+README.md
+.git
+.gitignore
 .settings
 .project
 .classpath
